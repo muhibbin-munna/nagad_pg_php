@@ -1,63 +1,106 @@
 # Nagad Sandbox Payment Gateway Integration Guide
 
-## # Credentials to be provided by Nagad
+## Table of Contents
 
-```
-$MerchantID = "Specific Merchant id"
-$merchantPrivateKey = "Merchant Private Key"
-$pgPublicKey = "Nagad Payment Gateway public Key"
-```
+- [Nagad Sandbox Payment Gateway Integration Guide](#nagad-sandbox-payment-gateway-integration-guide)
+  - [Table of Contents](#table-of-contents)
+  - [1. Overview](#1-overview)
+  - [2. Credentials](#2-credentials)
+  - [3. Payment Initialization](#3-payment-initialization)
+    - [3.1 API Request Initialization](#31-api-request-initialization)
+    - [HTTP Method](#http-method)
+    - [3.2 API Request Header](#32-api-request-header)
+    - [3.3 API Request Body](#33-api-request-body)
+      - [Step 1 : Create JSON Payload](#step-1--create-json-payload)
+      - [Step 2: Encrypt the Payload](#step-2-encrypt-the-payload)
+      - [Step 3: Generate a Signature](#step-3-generate-a-signature)
+    - [3.4 API Request Example](#34-api-request-example)
+    - [3.5 Handling Initialization Response](#35-handling-initialization-response)
+  - [4. Payment Completion](#4-payment-completion)
+    - [4.1 API Request Completion](#41-api-request-completion)
+    - [4.2 API Request Header](#42-api-request-header)
+    - [4.3 API Request Body](#43-api-request-body)
+    - [4.4 API Request Example](#44-api-request-example)
+      - [Equivalent curl](#equivalent-curl)
+    - [4.5 Handling Completion Response](#45-handling-completion-response)
+  - [Appendix](#appendix)
+    - [5.1 Encryption \& Signing Methods](#51-encryption--signing-methods)
+    - [5.2 Common Errors \& Debugging](#52-common-errors--debugging)
 
+---
 
-## #  Payment Initialization
+## 1. Overview
 
-## * Initialize API Request
+This guide outlines the steps for integrating the Nagad Sandbox Payment Gateway into your application. It includes details on API requests, required headers, and response handling.
 
-### 1. Initialize API:
+## 2. Credentials
 
-`http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/checkout/initialize/{merchantId}/{orderId}`
+You will need the following credentials provided by Nagad to start integrating the payment gateway:
 
-### 2. Initialize API Header:
-  
+- **Merchant ID**: `Specific Merchant id`
+- **Merchant Private Key**: `Merchant Private Key`
+- **Payment Gateway Public Key**: `Nagad Payment Gateway Public Key`
 
-```
+## 3. Payment Initialization
+
+### 3.1 API Request Initialization
+
+To begin the payment process, initialize the payment by sending a POST request to the following URL:
+
+**Endpoint:** `http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/checkout/initialize/{merchantId}/{orderId}`
+
+### HTTP Method
+
+`POST`
+
+### 3.2 API Request Header
+
+Include the following headers in your API request:
+
+```yaml
 Content-Type: application/json
 X-KM-Api-Version: v-0.2.0
 X-KM-IP-V4: 192.168.0.1
 X-KM-MC-Id: 683002007104225
 X-KM-Client-Type: PC_WEB
 ```
-### 3. Initialize API Body:
 
-#### Step 1 : Create a json like below format -
+### 3.3 API Request Body
+
+The request body must be constructed in the following steps:
+
+#### Step 1 : Create JSON Payload
+
 ```json
-plainSensitiveData = 
 {
-    "merchantId":"683002007104225",
-    "orderId":"Order20240202124953",
-    "datetime":"20240202124953",
-    "challenge":348027480 //random generated number
+    "merchantId": "683002007104225",
+    "orderId": "Order20240202124953",
+    "datetime": "20240202124953",
+    "challenge": 348027480
 }
 ```
 
-#### Step 2: Encrypt the plainSensitiveData
+#### Step 2: Encrypt the Payload
+
 sensitiveData = Encrypt(plainSensitiveData, NPG Public Key, PKCS1Padding)
 
-```
+```text
+
 sensitiveData = "PMxT0xqUBzUrrTmoW1bkxDfcWN6lnw8l2gnCqGPL8OZ0/MLMDBS1bFXwwG+o305XLCGohgSnhSFPA8xD0xGzQXllbgbTbbQWRyLdldJPdpvyvtbjSEkPEoCtShPvpo7oqubX105SgJ7cvxex6k8QqyJ9YSPGCjYQF1CQmJyo3ChqMO/JoWtSyc1KQKs8knKP1uzJttKF30rNzHAP1BD9AvYoda72S1WJEAMbTc34KGyy2f462m8zsTBxFYnPFqpVOBf2BQOT2QCOPly8W39/UfEhq/RqDhvxDSubmpL8YisrxHeKnEo3Br4aweouEdBx4l276AfcAx0DtfHttBtQ/Q=="
 ```
 
-#### Step 3: Generate signature
+#### Step 3: Generate a Signature
+
 signature = Sign(plainSensitiveData, Merchant Private Key,
 SHA1withRSA)
 
-```
+```text
 signature = "B6QMGIFREuXwqZ/1D91rqIxMf5lCKcqwA5TATzTv5Z2OYN8e7Ex2uldjAX3N647qN2IqPUAGOV+722qGYZjfW7LWJdA6pY0buQwoZdfHqZX3zt57mXMNdEJNoBHVqEqXGXXB5Ke+U1r0kBxrocImiykHiLbAmJxvO3CR1EsFnLUhldwzRPw9WU/DL1sCh6g02mcy/z4X09CtMQbmbVdkfm3Vn3Rdy8lcPWz1tQkq/hkdMe2t/w+p6dc2hEO6wSsWwyoYOWS9X4pOYwR0ZPJfU/U+9FAcRevHoe2WdzmE7fbGjLoqs3MOgNkaWAzXxHqsw8pksGCzbVw7xUeuJxOtsw=="
 ```
 
-#### Step 4: Send post Request to the Initialize API with those header and post body {datetime, sensitiveData, signature}. 
+### 3.4 API Request Example
 
-#### Equivalent curl: 
+Here is an example using curl to send the initialization request:
 
 ```bash
 curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/initialize/683002007104225/Order20240202124953 \
@@ -70,12 +113,14 @@ curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs
     "sensitiveData": "PMxT0xqUBzUrrTmoW1bkxDfcWN6lnw8l2gnCqGPL8OZ0/MLMDBS1bFXwwG+o305XLCGohgSnhSFPA8xD0xGzQXllbgbTbbQWRyLdldJPdpvyvtbjSEkPEoCtShPvpo7oqubX105SgJ7cvxex6k8QqyJ9YSPGCjYQF1CQmJyo3ChqMO/JoWtSyc1KQKs8knKP1uzJttKF30rNzHAP1BD9AvYoda72S1WJEAMbTc34KGyy2f462m8zsTBxFYnPFqpVOBf2BQOT2QCOPly8W39/UfEhq/RqDhvxDSubmpL8YisrxHeKnEo3Br4aweouEdBx4l276AfcAx0DtfHttBtQ/Q==",
     "signature": "B6QMGIFREuXwqZ/1D91rqIxMf5lCKcqwA5TATzTv5Z2OYN8e7Ex2uldjAX3N647qN2IqPUAGOV+722qGYZjfW7LWJdA6pY0buQwoZdfHqZX3zt57mXMNdEJNoBHVqEqXGXXB5Ke+U1r0kBxrocImiykHiLbAmJxvO3CR1EsFnLUhldwzRPw9WU/DL1sCh6g02mcy/z4X09CtMQbmbVdkfm3Vn3Rdy8lcPWz1tQkq/hkdMe2t/w+p6dc2hEO6wSsWwyoYOWS9X4pOYwR0ZPJfU/U+9FAcRevHoe2WdzmE7fbGjLoqs3MOgNkaWAzXxHqsw8pksGCzbVw7xUeuJxOtsw=="
   }'
-
 ```
 
-## * Initialize API Response
+### 3.5 Handling Initialization Response
 
-### 1. Get Response
+After sending the request, you will receive a response containing sensitiveData and signature.
+
+Example Response:
+
 ```json
 InitializeResponse = 
 {
@@ -83,69 +128,80 @@ InitializeResponse =
   "signature": "UmMg7n3g+6NGPLYbELnOoI93kZ0ux6C0xP98rM3KOBSBS75GkcMhIGSDqaX5V+wmuk6SvcRAa1+250rnpO9oaZsOkPuk5hO+gQEe7gHNUrcK2d5XwJSr6VTkRv/fJJiAzPtNNmgC1aHFPj2J+jEGDiL/38aNu9CatrC3rG3urscXwPlafp77bdnDX344cFw2CmhHOQ1jnFKxWVZvIgAYu10rwnGIUU/7SgDgCper7KSd3v9/Smlrm3aOJT6sjAcjnfMg1F+3tdoCQfXbK5am/MOCx8vGUfRk/BoOz9uxaHCC9Z32+spAhj0rRie2GaEPQjvaJkWpQwKvLA+6vC7YHA=="
 }
 ```
-### 2. Decode data from response
-```
-decodedSensitiveData = Base64_Decode(sensitiveData)
-decodedsignature = Base64_Decode(signature)
-decryptedSensitiveData = Decrypt(decodedSensitiveData, MS Private Key, PKCS1Padding)
+
+**Step 1: Decrypt the Response**
+Decrypt the sensitiveData using your Merchant Private Key
+
+```text
+decryptedSensitiveData = Decrypt(Base64_Decode(sensitiveData), Merchant Private Key, PKCS1Padding)
 ```
 
+**Step 2: Verify the Signature**
+Verify the signature using Nagad Payment Gateway's Public Key
+
+```text
+verification = Verify(decryptedSensitiveData, Base64_Decode(signature), NPG Public Key, SHA1withRSA)
+```
+
+Example Decrypted Data:
+
 ```json
-decryptedSensitiveData = 
 {
-  "paymentReferenceId": "MDIwMjEyNTQ0NTAzMy42ODMwMDIwMDcxMDQyMjUuT3JkZXIyMDI0MDIwMjEyNDk1My5jYjEwOWM2NTgyYzU2ZjMzZjc0Zg==",
+  "paymentReferenceId": "MDIwMjEyNTQ0NTAzMy4...",
   "challenge": "cb109c6582c56f33f74f",
   "acceptDateTime": "20240202125445"
 }
 ```
 
-### 3. Signature Verification
+## 4. Payment Completion
+
+### 4.1 API Request Completion
+
+To complete the payment, send a POST request to the following URL:
+
+**Endpoint:**
+
+```text
+http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/complete/{PaymentReferenceId_From_decryptedSensitiveData}
 ```
-verification = Verify(decryptedSensitiveData, decodedsignature, NPG Public Key, SHA1withRSA)
-```
 
-## #  Payment Complete:
+### 4.2 API Request Header
 
-## * Checkout Complete API Request
-### 1. Checkout Complete API
+Use the same headers as in the initialization request.
 
-`http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/complete/{PaymentReferenceId_From_decryptedSensitiveData}`
+### 4.3 API Request Body
 
-### 2. Checkout Complete API Header
- Same as Initialize API Header
+Construct the request body in the following steps:
+**Step 1: Create JSON Payload**
 
-### 3. Checkout Complete API Body
-  
-#### Step 1 : Create a json like below format -
 ```json
-plainSensitiveData = 
 {
-  "merchantId":"683002007104225",
-  "orderId":"Order20240202124953",
-  "currencyCode":"050",
-  "amount":"100",
-  "challenge":"cb109c6582c56f33f74f" //provided from initialize api response
+  "merchantId": "683002007104225",
+  "orderId": "Order20240202124953",
+  "currencyCode": "050",
+  "amount": "100",
+  "challenge": "cb109c6582c56f33f74f"
 }
 ```
-#### Step 2: Encrypt the plainSensitiveData
-sensitiveData = Encrypt(plainSensitiveData, NPG
-Public Key, PKCS1Padding)
 
-```
-sensitiveData = "LCTqbe3kvVotumG93skO6+iPhzkK0cr38ZnyZCcls93gx2bIiriiIA9S9T3Kf5Q6sbxTi2tx0Kx5BI16dARxQw52sOnlHLiGOHL9Sc1SPpj7WMSrFfL/N5kk9MJQ2iUxSUpRceNDKc/PniuoVro+Jpey3Y+Y0Wx1TwolkmAuSjaONMJf+WVmtoUvS7LFwkm4Mbu74PMsrxM+i80yMmumcuCNKerTp4UhZ9hXwD2sbRGevfmcavjDwShlK4+IatZLNQe9uxn9MZ6RfFH3M0vEqcYywd/qfKye0OLE3PlslOZRK2JALWJDdr4ItvllBfIzSMTmnQ97hT2/uLKQk2jSTA=="
-```
+**Step 2: Encrypt the Payload**
+Encrypt the JSON payload using Nagad Payment Gateway's Public Key with PKCS1Padding.
 
-#### Step 3: Generate signature
- signature = Sign(plainSensitiveData, Merchant Private Key,
-SHA1withRSA)
-
-```
-signature = "DZz8IslvhHkEpesk4BQLaQdZ32fGv+HrULA7HLixku/uLlk3wx3xrDhKZ5142nHziX4I9G4fGF7sS8qGwl9I85GkVIS4bznBHhcP2wCifK5wT4pJ5HX1rn0veA+7OrZ89Y/61kMk+wFeX0s/88HbZwusE1zbMOPG8AwtG7UDX1QOyxXfH9ucNLQEFZ9S1ouR9WDsiWZN+GLep5oYLFiLDjOoSR4QSdNTTtJaJXz/ymr8JW3bXKmUlTPNiGY7ko/R/i55V5T0/HULXdtw2vDRkDslwfsfBKOAO2uDiL88NxzADdoZFtAWBeI9XNZOnKdAhKjI1NKXFrzbEsxQncqDTQ=="
+```text
+sensitiveData = Encrypt(plainSensitiveData, NPG Public Key, PKCS1Padding)
 ```
 
-#### Step 4: Send post Request to the Initialize API with those header and post_body = {sensitiveData, signature, merchantCallbackURL, additionalMerchantInfo}. 
+**Step 3: Generate a Signature**
+Sign the payload using your Merchant Private Key with SHA1withRSA.
 
-#### Equivalent curl: 
+```text
+signature = Sign(plainSensitiveData, Merchant Private Key, SHA1withRSA)
+```
+
+### 4.4 API Request Example
+
+#### Equivalent curl
+
 ```bash
 curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/complete/MDIwMjEyNTQ0NTAzMy42ODMwMDIwMDcxMDQyMjUuT3JkZXIyMDI0MDIwMjEyNDk1My5jYjEwOWM2NTgyYzU2ZjMzZjc0Zg== \
   -H "X-KM-IP-V4: 192.168.0.1" \
@@ -163,21 +219,29 @@ curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs
 }'
 ```
 
-## * Checkout Complete API Response
+### 4.5 Handling Completion Response
 
-### 1. Get Reponse
+After sending the completion request, you will receive a callBackUrl which redirects to the Nagad payment gateway page.
+
+Example Response:
+
 ```json
-Response = 
 {
-  "callBackUrl":"https://sandbox-ssl.mynagad.com:10061/check-out/MDIwMjEyNTQ0NTAzMy42ODMwMDIwMDcxMDQyMjUuT3JkZXIyMDI0MDIwMjEyNDk1My5jYjEwOWM2NTgyYzU2ZjMzZjc0Zg==",
-  "status":"Success"
+  "callBackUrl": "https://sandbox-ssl.mynagad.com:10061/check-out/...",
+  "status": "Success"
 }
 ```
-### 2. CallBackUrl
-The callBackUrl will display the payment gateway page as below
 
-<img src="nagad_pg.png" alt="Payment Gateway Page" width="300" >
+The callBackUrl will display the payment gateway page for the user to complete the payment.
 
+## Appendix
 
+### 5.1 Encryption & Signing Methods
 
+- **Encryption**: Use PKCS1Padding with Nagad Payment Gateway's Public Key.
+- **Signing**: Use SHA1withRSA with your Merchant Private Key.
 
+### 5.2 Common Errors & Debugging
+
+- **Invalid Signature**: Ensure that the signature is correctly generated using the specified algorithm and keys.
+- **Decryption Issues**: Verify that the correct key and padding scheme are used for decryption.
