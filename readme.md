@@ -18,7 +18,6 @@
     - [4.2 API Request Header](#42-api-request-header)
     - [4.3 API Request Body](#43-api-request-body)
     - [4.4 API Request Example](#44-api-request-example)
-      - [Equivalent curl](#equivalent-curl)
     - [4.5 Handling Completion Response](#45-handling-completion-response)
   - [Appendix](#appendix)
     - [5.1 Encryption \& Signing Methods](#51-encryption--signing-methods)
@@ -193,8 +192,6 @@ signature = Sign(plainSensitiveData, Merchant Private Key, SHA1withRSA)
 ```
 
 ### 4.4 API Request Example
-
-#### Equivalent curl
 
 ```bash
 curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/complete/MDIwMjEyNTQ0NTAzMy42ODMwMDIwMDcxMDQyMjUuT3JkZXIyMDI0MDIwMjEyNDk1My5jYjEwOWM2NTgyYzU2ZjMzZjc0Zg== \
