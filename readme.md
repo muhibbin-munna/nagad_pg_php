@@ -11,9 +11,6 @@
     - [HTTP Method](#http-method)
     - [3.2 API Request Header](#32-api-request-header)
     - [3.3 API Request Body](#33-api-request-body)
-      - [Step 1 : Create JSON Payload](#step-1--create-json-payload)
-      - [Step 2: Encrypt the Payload](#step-2-encrypt-the-payload)
-      - [Step 3: Generate a Signature](#step-3-generate-a-signature)
     - [3.4 API Request Example](#34-api-request-example)
     - [3.5 Handling Initialization Response](#35-handling-initialization-response)
   - [4. Payment Completion](#4-payment-completion)
@@ -68,8 +65,7 @@ X-KM-Client-Type: PC_WEB
 ### 3.3 API Request Body
 
 The request body must be constructed in the following steps:
-
-#### Step 1 : Create JSON Payload
+**Step 1 : Create JSON Payload**
 
 ```json
 {
@@ -80,8 +76,7 @@ The request body must be constructed in the following steps:
 }
 ```
 
-#### Step 2: Encrypt the Payload
-
+**Step 2: Encrypt the Payload**
 sensitiveData = Encrypt(plainSensitiveData, NPG Public Key, PKCS1Padding)
 
 ```text
@@ -89,8 +84,7 @@ sensitiveData = Encrypt(plainSensitiveData, NPG Public Key, PKCS1Padding)
 sensitiveData = "PMxT0xqUBzUrrTmoW1bkxDfcWN6lnw8l2gnCqGPL8OZ0/MLMDBS1bFXwwG+o305XLCGohgSnhSFPA8xD0xGzQXllbgbTbbQWRyLdldJPdpvyvtbjSEkPEoCtShPvpo7oqubX105SgJ7cvxex6k8QqyJ9YSPGCjYQF1CQmJyo3ChqMO/JoWtSyc1KQKs8knKP1uzJttKF30rNzHAP1BD9AvYoda72S1WJEAMbTc34KGyy2f462m8zsTBxFYnPFqpVOBf2BQOT2QCOPly8W39/UfEhq/RqDhvxDSubmpL8YisrxHeKnEo3Br4aweouEdBx4l276AfcAx0DtfHttBtQ/Q=="
 ```
 
-#### Step 3: Generate a Signature
-
+**Step 3: Generate a Signature**
 signature = Sign(plainSensitiveData, Merchant Private Key,
 SHA1withRSA)
 
