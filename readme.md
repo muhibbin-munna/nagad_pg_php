@@ -8,7 +8,6 @@
   - [2. Credentials](#2-credentials)
   - [3. Payment Initialization](#3-payment-initialization)
     - [3.1 API Request Initialization](#31-api-request-initialization)
-    - [HTTP Method](#http-method)
     - [3.2 API Request Header](#32-api-request-header)
     - [3.3 API Request Body](#33-api-request-body)
     - [3.4 API Request Example](#34-api-request-example)
@@ -45,8 +44,7 @@ To begin the payment process, initialize the payment by sending a POST request t
 
 **Endpoint:** `http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/checkout/initialize/{merchantId}/{orderId}`
 
-### HTTP Method
-
+**HTTP Method**
 `POST`
 
 ### 3.2 API Request Header
@@ -234,5 +232,6 @@ The callBackUrl will display the payment gateway page for the user to complete t
 
 ### 5.2 Common Errors & Debugging
 
+- **Ensure Correct Keys**: Ensure that the keys are correctly taken from the mail in sandbox and correctly generated for live.
 - **Invalid Signature**: Ensure that the signature is correctly generated using the specified algorithm and keys.
 - **Decryption Issues**: Verify that the correct key and padding scheme are used for decryption.
