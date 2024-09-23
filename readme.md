@@ -113,7 +113,6 @@ After sending the request, you will receive a response containing sensitiveData 
 Example Response:
 
 ```json
-InitializeResponse = 
 {
   "sensitiveData": "DKEmjgIU5QODnqw1N6yRb1KCo11+4Be83ZW7bQJX3zAodO4ABn4WRFkvjsz11tYwCmx1vpFmTSgKfWEY7APVYmxoB9zT+M4QRQ1H3DGvTxr7w/EJxK4HDV4UfUTlp5lCHh/lkBaVrNDWsEKa0Qp8Kxj6TlNQ1X8UFE2T/QU8wY63XTHmWCj2bhfGGrW+5WUzpJ1ofszee3QC+WRj8/BUT+j1AbTSqv2/frLg16gh/QJYxIxHdvNu0zV7ai4KO+oCuFZXMebvwGXNac5GHlfa3OZRwihG1gphdeeF1yhphGK6uo/t7DgcUwWDJq5RMkMe7fIU59ce8KTVFxiqBoosQw==",
   "signature": "UmMg7n3g+6NGPLYbELnOoI93kZ0ux6C0xP98rM3KOBSBS75GkcMhIGSDqaX5V+wmuk6SvcRAa1+250rnpO9oaZsOkPuk5hO+gQEe7gHNUrcK2d5XwJSr6VTkRv/fJJiAzPtNNmgC1aHFPj2J+jEGDiL/38aNu9CatrC3rG3urscXwPlafp77bdnDX344cFw2CmhHOQ1jnFKxWVZvIgAYu10rwnGIUU/7SgDgCper7KSd3v9/Smlrm3aOJT6sjAcjnfMg1F+3tdoCQfXbK5am/MOCx8vGUfRk/BoOz9uxaHCC9Z32+spAhj0rRie2GaEPQjvaJkWpQwKvLA+6vC7YHA=="
