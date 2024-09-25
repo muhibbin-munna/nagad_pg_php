@@ -21,6 +21,7 @@
   - [Appendix](#appendix)
     - [5.1 Encryption \& Signing Methods](#51-encryption--signing-methods)
     - [5.2 Common Errors \& Debugging](#52-common-errors--debugging)
+    - [5.3 Detailed Documentation](#53-detailed-documentation)
 
 ---
 
@@ -42,7 +43,11 @@ You will need the following credentials provided by Nagad to start integrating t
 
 To begin the payment process, initialize the payment by sending a POST request to the following URL:
 
-**Endpoint:** `http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/checkout/initialize/{merchantId}/{orderId}`
+**Endpoint:**
+
+```text
+http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/checkout/initialize/{merchantId}/{orderId}
+```
 
 **HTTP Method**
 `POST`
@@ -54,14 +59,15 @@ Include the following headers in your API request:
 ```yaml
 Content-Type: application/json
 X-KM-Api-Version: v-0.2.0
-X-KM-IP-V4: 192.168.0.1
-X-KM-MC-Id: 683002007104225
+X-KM-IP-V4: YOUR_APPLICATION_IP
+X-KM-MC-Id: YOUR_MERCHANT_ID
 X-KM-Client-Type: PC_WEB
 ```
 
 ### 3.3 API Request Body
 
 The request body must be constructed in the following steps:
+
 **Step 1 : Create JSON Payload**
 
 ```json
@@ -234,3 +240,7 @@ The callBackUrl will display the payment gateway page for the user to complete t
 - **Ensure Correct Keys**: Ensure that the keys are correctly taken from the mail in sandbox and correctly generated for live.
 - **Invalid Signature**: Ensure that the signature is correctly generated using the specified algorithm and keys.
 - **Decryption Issues**: Verify that the correct key and padding scheme are used for decryption.
+
+### 5.3 Detailed Documentation
+
+For more detailed documentation, you can download the official Nagad Sandbox Payment Gateway integration guide [here](https://github.com/muhibbin-munna/nagad_pg_php/blob/master/Nagad%20Online%20Payment%20API%20Integration%20Guide%20v3.3.pdf). This guide contains step-by-step instructions, code examples, and a troubleshooting section to assist you throughout the integration process.
