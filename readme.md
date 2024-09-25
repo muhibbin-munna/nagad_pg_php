@@ -243,4 +243,4 @@ The callBackUrl will display the payment gateway page for the user to complete t
 
 ### 5.3 Detailed Documentation
 
-For more detailed documentation, you can download the official Nagad Sandbox Payment Gateway integration guide [here](https://github.com/muhibbin-munna/nagad_pg_php/blob/master/Nagad%20Online%20Payment%20API%20Integration%20Guide%20v3.3.pdf). This guide contains step-by-step instructions, code examples, and a troubleshooting section to assist you throughout the integration process.
+For more detailed documentation, you can download the official Nagad Sandbox Payment Gateway integration guide [here](https://github.com/muhibbin-munna/nagad_pg_php/blob/master/Nagad%20Online%20Payment%20API%20Integration%20Guide%20v3.3.pdf). This guide contains step-by-step instructions with details to assist you throughout the integration process.
