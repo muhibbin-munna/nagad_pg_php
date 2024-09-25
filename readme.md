@@ -15,9 +15,12 @@
   - [4. Payment Completion](#4-payment-completion)
     - [4.1 API Request Completion](#41-api-request-completion)
     - [4.2 API Request Header](#42-api-request-header)
-    - [4.3 API Request Body](#43-api-request-body)
-    - [4.4 API Request Example](#44-api-request-example)
-    - [4.5 Handling Completion Response](#45-handling-completion-response)
+    - [4.3 Callback URL Parameter](#43-callback-url-parameter)
+      - [How it Works](#how-it-works)
+      - [Required Parameter](#required-parameter)
+    - [4.4 API Request Body](#44-api-request-body)
+    - [4.5 API Request Example](#45-api-request-example)
+    - [4.6 Handling Completion Response](#46-handling-completion-response)
   - [Appendix](#appendix)
     - [5.1 Encryption \& Signing Methods](#51-encryption--signing-methods)
     - [5.2 Common Errors \& Debugging](#52-common-errors--debugging)
@@ -165,7 +168,19 @@ http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/co
 
 Use the same headers as in the initialization request.
 
-### 4.3 API Request Body
+### 4.3 Callback URL Parameter
+
+The `merchantCallbackURL` parameter is an essential part of the payment gateway integration process. It is used to notify your application about the payment status once the transaction is completed.
+
+#### How it Works
+
+After a customer do a payment, the Nagad payment gateway processes the transaction and sends the result (whether it was successful, failed, or canceled) to the URL you specify as the `merchantCallbackURL`. Your backend should handle this callback to update the transaction status accordingly.
+
+#### Required Parameter
+
+You must provide a valid, publicly accessible URL as the `merchantCallbackURL`. The Nagad server will send a request to this URL with the payment response data in params.
+
+### 4.4 API Request Body
 
 Construct the request body in the following steps:
 **Step 1: Create JSON Payload**
@@ -194,7 +209,7 @@ Sign the payload using your Merchant Private Key with SHA1withRSA.
 signature = Sign(plainSensitiveData, Merchant Private Key, SHA1withRSA)
 ```
 
-### 4.4 API Request Example
+### 4.5 API Request Example
 
 ```bash
 curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/complete/MDIwMjEyNTQ0NTAzMy42ODMwMDIwMDcxMDQyMjUuT3JkZXIyMDI0MDIwMjEyNDk1My5jYjEwOWM2NTgyYzU2ZjMzZjc0Zg== \
@@ -213,7 +228,7 @@ curl -X POST http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs
 }'
 ```
 
-### 4.5 Handling Completion Response
+### 4.6 Handling Completion Response
 
 After sending the completion request, you will receive a callBackUrl which redirects to the Nagad payment gateway page.
 
@@ -243,4 +258,4 @@ The callBackUrl will display the payment gateway page for the user to complete t
 
 ### 5.3 Detailed Documentation
 
-For more detailed documentation, you can download the official Nagad Sandbox Payment Gateway integration guide [here](https://github.com/muhibbin-munna/nagad_pg_php/blob/master/Nagad%20Online%20Payment%20API%20Integration%20Guide%20v3.3.pdf). This guide contains step-by-step instructions with details to assist you throughout the integration process.
+For more detailed documentation, you can download the official Nagad Sandbox Payment Gateway integration guide [here](https://github.com/muhibbin-munna/nagad_pg_php/blob/master/resource/Nagad%20Online%20Payment%20API%20Integration%20Guide%20v3.3.pdf). This guide contains step-by-step instructions with details to assist you throughout the integration process.
