@@ -15,7 +15,7 @@
   - [4. Payment Completion](#4-payment-completion)
     - [4.1 API Request Completion](#41-api-request-completion)
     - [4.2 API Request Header](#42-api-request-header)
-    - [4.3 Callback URL Parameter](#43-callback-url-parameter)
+    - [4.3 Merchant Callback URL Parameter](#43-merchant-callback-url-parameter)
       - [How it Works](#how-it-works)
       - [Required Parameter](#required-parameter)
     - [4.4 API Request Body](#44-api-request-body)
@@ -168,7 +168,7 @@ http://sandbox.mynagad.com:10080/remote-payment-gateway-1.0/api/dfs/check-out/co
 
 Use the same headers as in the initialization request.
 
-### 4.3 Callback URL Parameter
+### 4.3 Merchant Callback URL Parameter
 
 The `merchantCallbackURL` parameter is an essential part of the payment gateway integration process. It is used to notify your application about the payment status once the transaction is completed.
 
